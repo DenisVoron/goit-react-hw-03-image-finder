@@ -4,28 +4,48 @@ const SETTINGS_URL = 'per_page=40&image_type=photo&orientation=horizontal&safese
 
 //https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12*/
 
-
-import React, { Component } from 'react'
+import { Component } from 'react'
 //import PropTypes from 'prop-types'
+import { toast } from 'react-toastify';
 
 export class Searchbar extends Component {
     state = {
-        query: ''
+        searchData: ''
     }
+
+    handleDataChange = event => {
+        this.setState({ searchData: event.currentTarget.value.toLowerCase() });
+    };
+
+    handleSubmit = event => {
+        event.preventDefault();
+        if (this.state.searchData.trim() === '') {
+            toast.warn('Введите данные загрузки')
+            return;
+        }
+
+        this.props.onSubmit(this.state.searchData);
+        this.setState({ searchData: '' });
+        console.log(this.state.searchData)
+    }
+
 
   render() {
       return (
-          <header class="searchbar">
-              <form class="form">
-                  <button type="submit" class="button">
-                      <span class="button-label">Search</span>
+          <header className="searchbar" onSubmit={this.handleSubmit}>
+              <form className="form">
+                  <button type="submit" className="button">
+                      <span className="button-label">Search</span>
                   </button>
 
                   <input
-                      class="input"
+                      className="input"
                       type="text"
-                      autocomplete="off"
-                      autofocus
+                      name="searchData"
+                      value={this.state.searchData}
+                      onChange={this.handleDataChange}
+                      autoComplete="off"
+                      autoFocus
                       placeholder="Search images and photos"
                   />
               </form>

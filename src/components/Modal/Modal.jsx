@@ -8,11 +8,22 @@ const modalRoot = document.querySelector('#modal-root');
 
 export class Modal extends Component {
 
+    componentDidMount() {
+    //
+    };
+
+    handleBackdropClick = e => {
+        if (e.target === e.currentTarget) {
+            this.props.onCloses();
+        }
+    };
 
     render() {
-        return createPortal (
-            <div className={css.Overlay}>
-                <div className={css.Modal}>{ this.props.children}</div>
+        return createPortal(
+            <div className={css.Overlay} onClick={this.handleBackdropClick}>
+                <div className={css.Modal}>
+                    <img src={this.props.imageUrl} alt="Foto" />
+                </div>
             </div>,
             modalRoot,
         );

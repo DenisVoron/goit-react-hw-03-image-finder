@@ -29,6 +29,7 @@ export class App extends Component {
     page: 1,
     loading: false,
     showModal: false,
+    currentLargeImageUrl: '',
   };
 
 
@@ -111,6 +112,20 @@ export class App extends Component {
     return this.setState({ loading: false });
   };
 
+  openModal = event => {
+    const currentLargeImageUrl = event.target.src;
+    console.log(currentLargeImageUrl);
+
+    this.setState({ currentLargeImageUrl });
+    this.toggleModal();
+  };
+
+  toggleModal = () => {
+    this.setState(state => ({
+      showModal: !state.showModal,
+    }));
+  };
+
 
   render() {
     const {
@@ -118,16 +133,15 @@ export class App extends Component {
       imagesOnPage,
       totalHits,
       loading,
-      showModal
+      showModal,
+      currentLargeImageUrl,
     } = this.state;
 
     console.log(loading);
     return (
       <SectionApp>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery images={images} />
-
-        {showModal && <Modal />}
+        <ImageGallery images={images} openModal={this.openModal} />
         <Dna
           visible={loading}
           height="80"
@@ -142,7 +156,12 @@ export class App extends Component {
             onClick={this.nextFetch}
           />
         )}
-        
+        {showModal && <Modal
+          onCloses={this.toggleModal}
+          imageUrl={currentLargeImageUrl}
+        />}
+
+
         {/*this.state.images && (
           <ul>
             {this.state.images.hits.map(({id, webformatURL})=>(

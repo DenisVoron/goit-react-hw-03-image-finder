@@ -11,8 +11,8 @@ import { SectionApp } from './SectionApp/SectionApp';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ButtonMore } from './Button/Button';
+import { Modal } from './Modal/Modal';
 
-//import css from './Loader.module.css';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '29561801-8060ff7959275b65131112eea';
@@ -28,6 +28,7 @@ export class App extends Component {
     imagesOnPage: 0,
     page: 1,
     loading: false,
+    showModal: false,
   };
 
 
@@ -49,21 +50,17 @@ export class App extends Component {
             );
           }
 
-          console.log(this.state.page);
-          console.log(this.state.visible);
+          console.log(this.state.loading);
           const arrayOfImages = this.createArrayOfImages(hits);
 
           this.setState({
             images: arrayOfImages,
             totalHits,
             imagesOnPage: hits.length,
-            loading: true
           })
         })
-        .finally(this.setState({
-          loading: false
-        }));
-      //console.log(this.state.visible);
+        .finally(()=> this.turnOffLoader());
+      console.log(this.state.loading);
     };
 
 
@@ -77,7 +74,7 @@ export class App extends Component {
         .then(({ hits }) => {
 
           const arrayOfImages = this.createArrayOfImages(hits);
-          console.log(hits);
+
           this.setState(prevState => {
             return { images: [...prevState.images, ...arrayOfImages] };
           });
@@ -86,22 +83,8 @@ export class App extends Component {
             imagesOnPage: this.state.images.length,
           });
         })
-        .finally(this.setState({ loading: false, visible: false }));
+        .finally(() => this.turnOffLoader());
     };
-  };
-
-
-
-  handleFormSubmit = searchData => {
-    this.setState({ searchData, page:1 });
-    console.log(searchData)
-  }
-
-  nextFetch = () => {
-    this.setState(prevState => {
-      console.log(this.state.page);
-      return { page: prevState.page + 1 };
-    });
   };
 
   createArrayOfImages = data => {
@@ -114,25 +97,52 @@ export class App extends Component {
   };
 
 
+  handleFormSubmit = searchData => {
+    this.setState({ searchData, page:1 });
+  }
+
+  nextFetch = () => {
+    this.setState(prevState => {
+      return { page: prevState.page + 1 };
+    });
+  };
+
+  turnOffLoader = () => {
+    return this.setState({ loading: false });
+  };
+
 
   render() {
     const {
       images,
       imagesOnPage,
-      totalHits
+      totalHits,
+      loading,
+      showModal
     } = this.state;
 
+    console.log(loading);
     return (
       <SectionApp>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery images={images} />
+
+        {showModal && <Modal />}
+        <Dna
+          visible={loading}
+          height="80"
+          width="80"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
 
         {imagesOnPage >= 12 && imagesOnPage < totalHits && (
           <ButtonMore
             onClick={this.nextFetch}
           />
         )}
-        {/*this.state.loading && <p>Loading...</p>*/}
+        
         {/*this.state.images && (
           <ul>
             {this.state.images.hits.map(({id, webformatURL})=>(
@@ -143,14 +153,7 @@ export class App extends Component {
             ))}
           </ul>
             )*/}
-        <Dna
-          visible={this.state.loading}
-          height="80"
-          width="80"
-          ariaLabel="dna-loading"
-          wrapperStyle={{}}
-          wrapperClass="dna-wrapper"
-        />
+        
         <ToastContainer
           position="top-right"
           autoClose={2000}

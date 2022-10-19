@@ -7,6 +7,7 @@ const SETTINGS_URL = 'per_page=40&image_type=photo&orientation=horizontal&safese
 import { Component } from 'react'
 //import PropTypes from 'prop-types'
 import { toast } from 'react-toastify';
+import { ImSearch } from 'react-icons/im';
 
 import css from './Searchbar.module.css';
 
@@ -37,7 +38,8 @@ export class Searchbar extends Component {
           <header className={css.Searchbar} onSubmit={this.handleSubmit}>
               <form className={css.SearchForm}>
                   <button type="submit" className={css.SearchFormButton}>
-                      <span className={css.SearchFormButtonLabel}>Search</span>
+                      <ImSearch />
+                      {/*<span className={css.SearchFormButtonLabel}>Search</span>*/}
                   </button>
 
                   <input

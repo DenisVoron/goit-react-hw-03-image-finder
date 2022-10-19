@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "react-icons": "^4.6.0",
     "react-toastify": "^9.0.8"
   }
 }

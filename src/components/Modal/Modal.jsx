@@ -9,14 +9,28 @@ const modalRoot = document.querySelector('#modal-root');
 export class Modal extends Component {
 
     componentDidMount() {
-    //
+        window.addEventListener('keydown', this.handleKeyDown);
     };
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.handleKeyDown);
+    }
+    
 
     handleBackdropClick = e => {
         if (e.target === e.currentTarget) {
             this.props.onCloses();
         }
     };
+
+    handleKeyDown = e => {
+        if (e.code === 'Escape') {
+            console.log('Если нажали на Escape');
+
+            this.props.onCloses();
+        }
+    };
+
 
     render() {
         return createPortal(
@@ -34,6 +48,3 @@ export class Modal extends Component {
 /*Modal.propTypes = {
 
 };*/
-
-
-//export default Modal;

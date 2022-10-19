@@ -150,7 +150,6 @@ export class App extends Component {
           wrapperStyle={{}}
           wrapperClass="dna-wrapper"
         />
-
         {imagesOnPage >= 12 && imagesOnPage < totalHits && (
           <ButtonMore
             onClick={this.nextFetch}
@@ -160,19 +159,6 @@ export class App extends Component {
           onCloses={this.toggleModal}
           imageUrl={currentLargeImageUrl}
         />}
-
-
-        {/*this.state.images && (
-          <ul>
-            {this.state.images.hits.map(({id, webformatURL})=>(
-            <li key={id}>
-              <p>тут будет фото</p>
-              <img src={webformatURL} alt="" />
-            </li>
-            ))}
-          </ul>
-            )*/}
-        
         <ToastContainer
           position="top-right"
           autoClose={2000}

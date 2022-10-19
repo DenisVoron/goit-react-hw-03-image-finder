@@ -1,6 +1,5 @@
 import css from './Button.module.css';
 
-
 export const ButtonMore = ({ onClick }) => {
     return (
         <button className={css.Button} type="button" onClick={onClick}>

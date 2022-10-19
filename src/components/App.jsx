@@ -36,7 +36,8 @@ export class App extends Component {
   componentDidUpdate(prevProps, prevState) {
 
     if (this.state.searchData !== prevState.searchData) {
-      console.log(prevState.searchData);
+      
+      //console.log(prevState.searchData);
 
       this.setState({ loading: true });
   

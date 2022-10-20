@@ -19,13 +19,13 @@ export class Modal extends Component {
 
     handleBackdropClick = e => {
         if (e.target === e.currentTarget) {
+
             this.props.onCloses();
         }
     };
 
     handleKeyDown = e => {
         if (e.code === 'Escape') {
-            console.log('Если нажали на Escape');
 
             this.props.onCloses();
         }
@@ -42,9 +42,4 @@ export class Modal extends Component {
             modalRoot,
         );
     }
-}
-
-
-/*Modal.propTypes = {
-
-};*/
+};

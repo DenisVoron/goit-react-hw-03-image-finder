@@ -1,24 +1,15 @@
 import { Component } from 'react';
-//import PropTypes from 'prop-types';
-
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Dna } from  'react-loader-spinner'
-//import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import { SectionApp } from './SectionApp/SectionApp';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ButtonMore } from './Button/Button';
 import { Modal } from './Modal/Modal';
-
-
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '29561801-8060ff7959275b65131112eea';
-const SETTINGS_URL = 'image_type=photo&orientation=horizontal&per_page=12';
-//https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12
-
+import FetchImages from '../services/fetch-api';
 
 export class App extends Component {
   state = {
@@ -34,25 +25,24 @@ export class App extends Component {
 
 
   componentDidUpdate(prevProps, prevState) {
+    const nextQuery = this.state.searchData;
+    const prevQuery = prevState.searchData;
+    const nextPage = this.state.page;
 
-    if (this.state.searchData !== prevState.searchData) {
-      
-      //console.log(prevState.searchData);
+    if (nextQuery !== prevQuery) {
 
       this.setState({ loading: true });
   
-      fetch(`${BASE_URL}?q=${this.state.searchData}&page=${this.state.page}&key=${API_KEY}&${SETTINGS_URL}`)
-        .then(response => response.json())
+      FetchImages(nextQuery, nextPage)
         .then(({ hits, totalHits }) => {
 
           if (hits.lenght === 0) {
             this.setState({ images: [], imagesOnPage: 0, totalHits: 0 });
             return Promise.reject(
-              new Error(`There is no image with name ${this.state.searchData}`)
+              new Error(`There is no image with name ${nextQuery}`)
             );
           }
 
-          console.log(this.state.loading);
           const arrayOfImages = this.createArrayOfImages(hits);
 
           this.setState({
@@ -62,17 +52,14 @@ export class App extends Component {
           })
         })
         .finally(()=> this.turnOffLoader());
-      console.log(this.state.loading);
     };
 
 
     if (this.state.page > prevState.page) {
-      console.log(prevState.searchData);
 
       this.setState({ loading: true });
   
-      fetch(`${BASE_URL}?q=${this.state.searchData}&page=${this.state.page}&key=${API_KEY}&${SETTINGS_URL}`)
-        .then(response => response.json())
+      FetchImages(nextQuery, nextPage)
         .then(({ hits }) => {
 
           const arrayOfImages = this.createArrayOfImages(hits);
@@ -127,7 +114,6 @@ export class App extends Component {
     }));
   };
 
-
   render() {
     const {
       images,
@@ -138,7 +124,6 @@ export class App extends Component {
       currentLargeImageUrl,
     } = this.state;
 
-    console.log(loading);
     return (
       <SectionApp>
         <Searchbar onSubmit={this.handleFormSubmit} />
@@ -169,8 +154,3 @@ export class App extends Component {
     );
   }
 }
-
-
-
-//export default App;
-

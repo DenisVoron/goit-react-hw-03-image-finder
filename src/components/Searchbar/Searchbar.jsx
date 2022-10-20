@@ -1,5 +1,5 @@
 import { Component } from 'react'
-//import PropTypes from 'prop-types'
+
 import { toast } from 'react-toastify';
 import { ImSearch } from 'react-icons/im';
 
@@ -17,15 +17,13 @@ export class Searchbar extends Component {
     handleSubmit = event => {
         event.preventDefault();
         if (this.state.searchData.trim() === '') {
-            toast.warn('Введите данные загрузки')
+            toast.warn('Введите данные для загрузки')
             return;
         }
 
         this.props.onSubmit(this.state.searchData);
         this.setState({ searchData: '' });
-        console.log(this.state.searchData)
     }
-
 
   render() {
       return (
@@ -33,7 +31,6 @@ export class Searchbar extends Component {
               <form className={css.SearchForm}>
                   <button type="submit" className={css.SearchFormButton}>
                       <ImSearch />
-                      {/*<span className={css.SearchFormButtonLabel}>Search</span>*/}
                   </button>
 
                   <input
@@ -50,4 +47,4 @@ export class Searchbar extends Component {
           </header>
       );
     }
-}
+};
